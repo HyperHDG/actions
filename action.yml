@@ -1,0 +1,83 @@
+####################################################################################################
+# GitHub action that builds and evebntually deploys a doxygen.
+#
+# Note that the inputs that are marked as not required are only required if the doxygen pages will
+# really be deployed. They are obsolete if you only want to check, whether doxygen works.
+#
+# Author: Andreas Rupp, Heidelberg University, 2021.
+####################################################################################################
+
+name: "Make and Deploy Doxygen"
+description: "Build and run the tests defined in CMake. Check whether they succeeded."
+
+inputs:
+  deploy_doxygen:
+    description: |
+      "'True' indicates that the doxygen is build AND deployed.
+      Doxygen is build, but not deployed to the remote repository if set to 'false'."
+    required: true
+    default: false
+  doxygen_command:
+    description: "Shell command to generate doxygen (if you are in the repository)."
+    required: true
+    default: "make doxygen"
+  ci_repo_token:
+    description: |
+      "Contains a token that should be stored as a secret within the repository of which the doxygen
+      will be created. This token is also set as personal access token of the ci_user. The ci_user
+      is recommended to be a dummy account with write access to the repository that will contain the
+      doygen pages only. Thus, the personal access token should grant access to the repository that
+      will contain the doxygen pages. This is not needed if 'deploy_doxygen' is set to false."
+    required: false
+    default: Debug
+  ci_user_name:
+    description: |
+      "Name of the ci_user, which is recommended to be a dummy account with write access to the
+      repository that will contain the doxygen pages, only."
+    required: false
+  ci_user_mail:
+    description: "Mail of the CI user."
+    required: false
+  pages_repo_organization:
+    description: "Organization that owns the repository that will contain the doxygen."
+    required: false
+  pages_repo_name:
+    description: "Name of the repository containing the doxgen pages (and nothing else)."
+    required: false
+  doxygen_path:
+    description: |
+      "Local path the of the folder containing the html files of the doxygen (after thos have been
+      created using the doxygen_command."
+    required: false
+  auxiliary_folder:
+    description: |
+      "Name of a not existing folder in your repositories. The folder will be generated and
+      manipulated by this script."
+    required: true
+    default: doxy_docs_ci
+
+runs:
+  using: composite
+  steps:
+  - name: Install Doxygen
+    shell: bash
+    run: sudo apt-get update; sudo apt-get install -y doxygen graphviz
+  - name: Create Doxygen
+    shell: bash
+    run: make doxygen
+  - name: Run Deploy Script
+    shell: bash
+    env:
+      REPO_TOKEN: ${{inputs.ci_repo_token}}
+      GH_REPO_ORG: ${{inputs.pages_repo_organization}}
+      GH_REPO_NAME: ${{inputs.pages_repo_name}}
+      GH_USER_NAME: ${{inputs.ci_user_name}}
+      GH_USER_MAIL: ${{inputs.ci_user_mail}}
+      DOXYGEN_PATH: ${{inputs.doxygen_path}}
+      GH_AUX_REP: ${{inputs.auxiliary_folder}}
+    run: |
+      if [ ${{inputs.deploy_doxygen}} = 'true' ]; then
+        git clone -b doxygen https://github.com/HyperHDG/actions.git ${{inputs.auxiliary_folder}}
+        chmod 700 ${{inputs.auxiliary_folder}}/deploy_doxygen.sh
+        ${{inputs.auxiliary_folder}}/deploy_doxygen.sh
+      fi
