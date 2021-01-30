@@ -1,0 +1,52 @@
+####################################################################################################
+# GitHub action that conducts CMake tests.
+#
+# Author: Andreas Rupp, Heidelberg University, 2021.
+####################################################################################################
+
+name: "CMake Test"
+description: "Build and run the tests defined in CMake. Check whether they succeeded."
+
+inputs:
+  build_type:
+    description: "CMake build type (Debug, Release, ...)."
+    required: true
+    default: Debug
+  build_directory:
+    description: "CMake build directory within repository."
+    required: true
+    default: build
+  c_compiler:
+    description: "C compiler that is used."
+    required: true
+    default: gcc
+  cxx_compiler:
+    description: "C++ compiler that is used."
+    required: true
+    default: g++
+
+runs:
+  using: composite
+  steps:
+  - name: Install Compiler
+    shell: bash
+    run: |
+      sudo apt-get update
+      sudo apt-get install -y ${{inputs.c_compiler}} ${{inputs.cxx_compiler}}
+  - name: Create Build Directory
+    shell: bash
+    run: cmake -E make_directory ${{runner.workspace}}/${{inputs.build_directory}}
+  - name: Run CMake
+    shell: bash
+    working-directory: ${{runner.workspace}}/${{inputs.build_directory}}
+    run: |
+      CC=${{inputs.c_compiler}} CXX=${{inputs.cxx_compiler}} \
+      cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{inputs.build_type}}
+  - name: Build Tests
+    shell: bash
+    working-directory: ${{runner.workspace}}/${{inputs.build_directory}}
+    run: cmake --build . --config ${{inputs.build_type}}
+  - name: Run Tests
+    shell: bash
+    working-directory: ${{runner.workspace}}/${{inputs.build_directory}}
+    run: ctest -C ${{inputs.build_type}}
