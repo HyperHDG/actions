@@ -1,5 +1,5 @@
 ####################################################################################################
-# GitHub action that builds and evebntually deploys a doxygen.
+# GitHub action that builds and eventually deploys a doxygen.
 #
 # Note that the inputs that are marked as not required are only required if the doxygen pages will
 # really be deployed. They are obsolete if you only want to check, whether doxygen works.
