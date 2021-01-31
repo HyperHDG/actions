@@ -14,7 +14,7 @@ of your repository's wiki either in an independent repository or a separate bran
 repository. Whenever your branch/repository is changed the wiki pages are automatically updated.
 
 This can be achieved by adding a GitHub action to the repository/branch containing the wiki pages.
-Thus, you need to add a file `deploy_wiki.yml` to the folder `.github/workflow/`. The file might
+Thus, you need to add a file `deploy_wiki.yml` to the folder `.github/workflows/`. The file might
 look like
 
 ```
