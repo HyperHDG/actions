@@ -1,0 +1,55 @@
+####################################################################################################
+# GitHub action that deploys a wiki.
+#
+# Author: Andreas Rupp, Heidelberg University, 2021.
+####################################################################################################
+
+name: "Deploy Wiki"
+description: "Build and run the tests defined in CMake. Check whether they succeeded."
+
+inputs:
+  ci_repo_token:
+    description: |
+      "Contains a token that should be stored as a secret within the repository of which the wiki
+      will be created. This token is also set as personal access token of the ci_user. The ci_user
+      is recommended to be a dummy account with write access to the repository that will contain the
+      doygen pages only. Thus, the personal access token should grant access to the repository that
+      will contain the wiki pages. This is not needed if 'deploy_doxygen' is set to false."
+    required: true
+  ci_user_name:
+    description: |
+      "Name of the ci_user, which is recommended to be a dummy account with write access to the
+      repository that will contain the wiki pages, only."
+    required: true
+  ci_user_mail:
+    description: "Mail of the CI user."
+    required: true
+  wiki_repo_organization:
+    description: "Organization that owns the repository that will contain the wiki."
+    required: true
+  wiki_repo_name:
+    description: "Name of the repository containing the wiki pages (and nothing else)."
+    required: true
+  auxiliary_folder:
+    description: |
+      "Name of a not existing folder in your repositories. The folder will be generated and
+      manipulated by this script."
+    required: true
+    default: wiki_docs_ci
+
+runs:
+  using: composite
+  steps:
+  - name: Run Deploy Script
+    shell: bash
+    env:
+      REPO_TOKEN: ${{inputs.ci_repo_token}}
+      GH_REPO_ORG: ${{inputs.wiki_repo_organization}}
+      GH_REPO_NAME: ${{inputs.wiki_repo_name}}
+      GH_USER_NAME: ${{inputs.ci_user_name}}
+      GH_USER_MAIL: ${{inputs.ci_user_mail}}
+      GH_AUX_REP: ${{inputs.auxiliary_folder}}
+    run: |
+      git clone -b wiki https://github.com/HyperHDG/actions.git ${{inputs.auxiliary_folder}}
+      chmod 700 ${{inputs.auxiliary_folder}}/deploy_wiki.sh
+      ${{inputs.auxiliary_folder}}/deploy_wiki.sh
