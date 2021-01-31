@@ -13,8 +13,8 @@ inputs:
       "Contains a token that should be stored as a secret within the repository of which the wiki
       will be created. This token is also set as personal access token of the ci_user. The ci_user
       is recommended to be a dummy account with write access to the repository that will contain the
-      doygen pages only. Thus, the personal access token should grant access to the repository that
-      will contain the wiki pages. This is not needed if 'deploy_doxygen' is set to false."
+      wiki pages only. Thus, the personal access token should grant access to the repository that
+      will contain the wiki pages."
     required: true
   ci_user_name:
     description: |
