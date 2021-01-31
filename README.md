@@ -1,6 +1,8 @@
 # GitHub Action: wiki
 
 GitHub action that deploys a wiki (which is administrated within a certain branch) of a repository.
+For a similar action with different (more detailed) manual, please refer to the branch `doxygen` of
+this repository.
 
 GitHub offers the possibility to write a wiki per repository. This wiki usually is contained in the
 repository `your_repo_name.wiki` which automatically publishes its content to the wiki page of the
