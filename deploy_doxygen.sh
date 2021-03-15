@@ -3,7 +3,7 @@
 ####################################################################################################
 # The original script is signed by Jeroen de Bruijn. A later version is signed by Francesco Romano.
 # This script is a further adaption of the script of Francesco Romano, which can be found under
-# https://gist.github.com/francesco-romano/351a6ae457860c14ee7e907f2b0fc1a5 (date: 20. Dec. 2020)
+# https://gist.github.com/francesco-romano/351a6ae457860c14ee7e907f2b0fc1a5 (date: Dec., 20 2020)
 #
 # Author: Andreas Rupp, Heidelberg University, 2021.
 ####################################################################################################
