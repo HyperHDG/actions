@@ -1,0 +1,30 @@
+####################################################################################################
+# GitHub action that conducts Clang-Format tests.
+#
+# Author: Andreas Rupp, Heidelberg University, 2021.
+####################################################################################################
+
+name: "Clang-Format Test"
+description: "Test whether files satisfy the formatting requirements defined in .clang-format file."
+
+inputs:
+  format_files:
+    description: |
+      "List of files that will be checked to be formatted.
+      You may use placeholders, but the '*' needs to be replaced by 'STAR'."
+    required: true
+    default: STAR.hxx STAR.h STAR.cxx STAR.cc STAR.c
+
+runs:
+  using: composite
+  steps:
+  - name: Install Clang-Format
+    shell: bash
+    run: sudo apt-get update; sudo apt-get install -y clang-format
+  - name: Run Clang-Format Test
+    shell: bash
+    run: |
+      for file in ${{inputs.format_files}}; do
+        file=${file//STAR/*}
+        find . -wholename $file -print | xargs clang-format -dry-run --Werror
+      done
