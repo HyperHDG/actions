@@ -64,7 +64,7 @@ runs:
     run: sudo apt-get update; sudo apt-get install -y doxygen graphviz
   - name: Create Doxygen
     shell: bash
-    run: make doxygen
+    run: ${{inputs.doxygen_command}}
   - name: Run Deploy Script
     shell: bash
     env:
