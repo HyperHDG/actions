@@ -35,18 +35,18 @@ runs:
       sudo apt-get install -y ${{inputs.c_compiler}} ${{inputs.cxx_compiler}}
   - name: Create Build Directory
     shell: bash
-    run: cmake -E make_directory ${{runner.workspace}}/${{inputs.build_directory}}
+    run: cmake -E make_directory $GITHUB_WORKSPACE/${{inputs.build_directory}}
   - name: Run CMake
     shell: bash
-    working-directory: ${{runner.workspace}}/${{inputs.build_directory}}
+    working-directory: $GITHUB_WORKSPACE/${{inputs.build_directory}}
     run: |
       CC=${{inputs.c_compiler}} CXX=${{inputs.cxx_compiler}} \
       cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{inputs.build_type}}
   - name: Build Tests
     shell: bash
-    working-directory: ${{runner.workspace}}/${{inputs.build_directory}}
+    working-directory: $GITHUB_WORKSPACE/${{inputs.build_directory}}
     run: cmake --build . --config ${{inputs.build_type}}
   - name: Run Tests
     shell: bash
-    working-directory: ${{runner.workspace}}/${{inputs.build_directory}}
+    working-directory: $GITHUB_WORKSPACE/${{inputs.build_directory}}
     run: ctest -C ${{inputs.build_type}}
