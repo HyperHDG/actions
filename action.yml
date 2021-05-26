@@ -41,7 +41,7 @@ runs:
     working-directory: ${{runner.workspace}}/${{inputs.build_directory}}
     run: |
       CC=${{inputs.c_compiler}} CXX=${{inputs.cxx_compiler}} \
-      cmake ${{runner.workspace}} -DCMAKE_BUILD_TYPE=${{inputs.build_type}}
+      cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{inputs.build_type}}
   - name: Build Tests
     shell: bash
     working-directory: ${{runner.workspace}}/${{inputs.build_directory}}
