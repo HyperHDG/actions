@@ -30,7 +30,7 @@ jobs:
       with:
        submodules: recursive
     - name: Install Python
-      run: sudo apt-get update; sudo apt-get install -y ${{env.PYTHON}}
+      run: sudo apt-get update; sudo apt-get install -y ${{env.PYTHON}} ${{env.CXX}}
     - name: Conduct CMake test
       uses: HyperHDG/actions@cmake
       with:
