@@ -44,4 +44,4 @@ runs:
   - name: Run Tests
     shell: bash
     working-directory: ${{runner.workspace}}/${{inputs.build_directory}}
-    run: ctest -C ${{inputs.build_type}}
+    run: ctest -C ${{inputs.build_type}} --rerun-failed --output-on-failure
